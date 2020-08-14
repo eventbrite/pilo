@@ -149,7 +149,7 @@ class Path(collections.MutableSequence):
     # collections.MutableSequence
 
     def __setitem__(self, index, value):
-        if isinstance(value, (long, int, six.string_types)):
+        if isinstance(value, (six.integer_types, six.string_types)):
             value = PathPart(key=value)
         self.parts[index] = value
 
@@ -157,7 +157,7 @@ class Path(collections.MutableSequence):
         del self.parts[index]
 
     def insert(self, index, value):
-        if isinstance(value, (long, int, six.string_types)):
+        if isinstance(value, (six.integer_types, six.string_types)):
             value = PathPart(key=value)
         self.parts.insert(index, value)
 
