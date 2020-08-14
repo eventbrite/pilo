@@ -1,6 +1,29 @@
+import codecs
 import re
+import os
 import setuptools
 from setuptools.command.test import test as TestCommand
+
+
+with codecs.open(
+    os.path.join(os.path.dirname(__file__), 'pilo', 'version.txt'),
+    mode='rb',
+    encoding='utf8',
+) as _version_file:
+    __version__ = _version_file.read().strip()
+
+
+class PyTest(TestCommand):
+
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        pytest.main(self.test_args)
+
 
 extras_require = {
     'tests': [
@@ -15,12 +38,7 @@ packages = setuptools.find_packages('.', exclude=('tests', 'tests.*'))
 
 setuptools.setup(
     name='pilo',
-    version=(
-        re
-        .compile(r".*__version__ = '(.*?)'", re.S)
-        .match(open('pilo/__init__.py').read())
-        .group(1)
-    ),
+    version=__version__,
     url='https://github.com/bninja/pilo/',
     license=open('LICENSE').read(),
     author='egon',
@@ -28,7 +46,8 @@ setuptools.setup(
     description='Yet another form parser.',
     long_description=open('README.rst').read(),
     packages=packages,
-    package_data={'': ['LICENSE']},
+    package_data={str('pilo'): [str('version.txt')]},
+    zip_safe=False,
     include_package_data=True,
     extras_require=extras_require,
     tests_require=extras_require['tests'],
