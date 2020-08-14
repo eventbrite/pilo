@@ -6,7 +6,7 @@ from setuptools.command.test import test as TestCommand
 
 
 with codecs.open(
-    os.path.join(os.path.dirname(__file__), 'piston', 'version.txt'),
+    os.path.join(os.path.dirname(__file__), 'pilo', 'version.txt'),
     mode='rb',
     encoding='utf8',
 ) as _version_file:
