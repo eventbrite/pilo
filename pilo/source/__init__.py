@@ -11,7 +11,7 @@ containers:
 - lists
 - tuples
 
-and primitives (e.g. int, six.string_types, etc). There are also `Source`
+and primitives (e.g. int, six.string_types[0], etc). There are also `Source`
 specializations for *computing* values from serializations:
 
 - `JsonSource`
@@ -264,7 +264,7 @@ class ParserMixin(object):
         return value
 
     parsers = {
-        six.string_types: as_string,
+        six.string_types[0]: as_string,
         int: as_int,
         float: as_float,
         bool: as_bool,
@@ -279,6 +279,7 @@ class ParserMixin(object):
         for t in types:
             if t in self.parsers:
                 return self.parsers[t]
+
             for mro_t in inspect.getmro(t):
                 if mro_t in self.parsers:
                     self.parsers[t] = self.types[mro_t]

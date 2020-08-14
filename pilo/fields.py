@@ -719,7 +719,7 @@ class String(Field):
         return self.munge.attach(self)(munge)
 
     def _parse(self, path):
-        return path.primitive(six.string_types)
+        return path.primitive(six.string_types[0])
 
     def _validate(self, value):
         if not super(String, self)._validate(value):
@@ -807,7 +807,7 @@ class Integer(Number):
             pattern_re = re.compile(pattern_re)
 
         def parse(self, path):
-            value = path.primitive(six.string_types)
+            value = path.primitive(six.string_types[0])
             m = pattern_re.match(value)
             if not m:
                 raise ValueError('{0} does not match pattern "{1}"'.format(value, pattern_re.pattern))
@@ -829,7 +829,7 @@ class Float(Number):
             pattern_re = re.compile(pattern_re)
 
         def parse(self, path):
-            value = path.primitive(six.string_types)
+            value = path.primitive(six.string_types[0])
             m = pattern_re.match(value)
             if not m:
                 raise ValueError('{0} does not match pattern "{1}"'.format(
@@ -850,7 +850,7 @@ class Decimal(Number):
             return path.value
         if isinstance(path.value, numbers.Number):
             return decimal.Decimal(path.value)
-        value = path.primitive(six.string_types)
+        value = path.primitive(six.string_types[0])
         return decimal.Decimal(value)
 
 
@@ -898,7 +898,7 @@ class Date(Field, RangeMixin):
     def _parse(self, path):
         if isinstance(path.value, datetime.date):
             return path.value
-        value = path.primitive(six.string_types)
+        value = path.primitive(six.string_types[0])
         if not self._format:
             self.ctx.errors.invalid('Unknown format for value "{0}"'.format(value))
             return ERROR
@@ -955,7 +955,7 @@ class Time(Field, RangeMixin):
         value = path.value
         if isinstance(value, (time.struct_time, datetime.time)):
             return value
-        value = path.primitive(six.string_types)
+        value = path.primitive(six.string_types[0])
         if self._format is not None:
             parsed = time.strptime(value, self._format)
         else:
@@ -993,7 +993,7 @@ class Datetime(Field, RangeMixin):
     def _parse(self, path):
         if isinstance(path.value, datetime.datetime):
             return path.value
-        value = path.primitive(six.string_types)
+        value = path.primitive(six.string_types[0])
         if self._format == 'iso8601':
             try:
                 parsed = iso8601.parse_date(value)
@@ -1214,7 +1214,7 @@ class Code(Field):
     def compile(cls, name, code, **code_globals):
         module = imp.new_module('<{0}>'.format(name))
         module.__dict__.update(code_globals)
-        exec code in module.__dict__
+        exec(code) in module.__dict__
         return module
 
     def _parse(self, path):
@@ -1251,7 +1251,7 @@ class UUID(Field):
         value = self.ctx.src_path.primitive()
         if isinstance(value, uuid.UUID):
             return value
-        return uuid.UUID(self.ctx.src_path.primitive(six.string_types))
+        return uuid.UUID(self.ctx.src_path.primitive(six.string_types[0]))
 
 
 class Type(String):

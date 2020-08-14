@@ -88,7 +88,7 @@ class JsonSource(Source):
         return value
 
     parsers = {
-        six.string_types: as_string,
+        six.string_types[0]: as_string,
         int: as_int,
         float: as_float,
         bool: as_bool,

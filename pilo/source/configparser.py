@@ -2,7 +2,6 @@ import collections
 import re
 import shlex
 import six
-import StringIO
 import textwrap
 
 from . import Source, Path, ParserMixin, NONE
@@ -133,7 +132,7 @@ class ConfigSource(Source, ParserMixin):
             parser = six.moves.configparser.ConfigParser()
             if preserve_case:
                 config.optionxform = lambda x: x
-            parser.readfp(StringIO.StringIO(config))
+            parser.readfp(six.moves.StringIO.StringIO(config))
             config = parser
         self.config = config
         self.section = section
