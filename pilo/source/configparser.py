@@ -1,7 +1,7 @@
 import collections
-import ConfigParser
 import re
 import shlex
+import six
 import StringIO
 import textwrap
 
@@ -31,7 +31,7 @@ class ConfigPath(Path):
 
     def resolve(self, container, part):
         try:
-            if isinstance(container, basestring):
+            if isinstance(container, six.string_types):
                 container = Sequence(container)
             return container[part.key]
         except (KeyError, IndexError, TypeError):
@@ -126,10 +126,10 @@ class ConfigSource(Source, ParserMixin):
         super(ConfigSource, self).__init__()
         if preserve_whitespace and location is None:
             raise ValueError('preserve_white_space=True without location')
-        if preserve_case and not isinstance(config, basestring):
+        if preserve_case and not isinstance(config, six.string_types):
             raise ValueError('preserve_case=True but config is not string')
-        if isinstance(config, basestring):
-            parser = ConfigParser.ConfigParser()
+        if isinstance(config, six.string_types):
+            parser = six.moves.configparser.ConfigParser()
             if preserve_case:
                 config.optionxform = lambda x: x
             parser.readfp(StringIO.StringIO(config))
@@ -164,7 +164,7 @@ class ConfigSource(Source, ParserMixin):
 
     def sequence(self, path):
         value = path.value
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             return len(Sequence(value))
         if isinstance(value, collections.Sequence):
             return len(value)
@@ -180,7 +180,7 @@ class ConfigSource(Source, ParserMixin):
 
         # preserve white-space for mulit-line strings
         if (self.preserve_whitespace and
-            isinstance(value, basestring) and
+            isinstance(value, six.string_types) and
             value.count('\n') > 0):
             value = self.as_raw(path)
 
