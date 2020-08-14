@@ -10,7 +10,7 @@ class MountPath(collections.MutableSequence):
         self.part = None
         self.dne = DefaultSource({}).path()
         self.paths = dict(
-            (key, src.path()) for key, src in src.srcs.iteritems()
+            (key, src.path()) for key, src in six.iteritems(src.srcs)
         )
 
     @property

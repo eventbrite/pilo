@@ -78,9 +78,9 @@ class SectionMapping(collections.Mapping):
         raise KeyError(key)
 
     def __iter__(self):
-        for k, v in self.sub_mappings.iteritems():
+        for k, _ in six.iteritems(self.sub_mappings):
             yield k
-        for k, v in self.config.items(self.section):
+        for k, _ in self.config.items(self.section):
             yield k
 
     def __len__(self):

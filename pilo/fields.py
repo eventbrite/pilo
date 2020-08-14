@@ -65,7 +65,7 @@ from . import (
 )
 
 
-__all__ = [
+__all__ = [  # noqa: F822
     'Field'
     'String',
     'Integer',
@@ -780,8 +780,8 @@ class Number(Field):
         self.max_value = value
         return self
 
-    def range(self, l, r):
-        return self.min(l).max(r)
+    def range(self, length, r):
+        return self.min(length).max(r)
 
     def _validate(self, value):
         if not super(Number, self)._validate(value):
@@ -873,8 +873,8 @@ class RangeMixin(object):
         self.before_value = value
         return self
 
-    def between(self, l, r):
-        return self.after(l).before(r)
+    def between(self, length, r):
+        return self.after(length).before(r)
 
 
 class Date(Field, RangeMixin):
@@ -1094,8 +1094,8 @@ class List(Field):
         self.max_length = value
         return self
 
-    def range(self, l, r):
-        return self.min(l).max(r)
+    def range(self, length, r):
+        return self.min(length).max(r)
 
     def _parse(self, path):
         try:

@@ -289,8 +289,8 @@ class ParserMixin(object):
         raise ValueError('No parser for type(s) {0}'.format(types))
 
 
-from .default import DefaultSource, DefaultPath
-from .configparser import ConfigSource, ConfigPath
-from .json import JsonSource, JsonPath
-from .union import UnionSource, UnionSource as union, UnionPath
-from .mount import MountSource, MountSource as mount, MountPath
+from .default import DefaultSource, DefaultPath  # noqa: E402, F401
+from .configparser import ConfigSource, ConfigPath  # noqa: E402, F401
+from .json import JsonSource, JsonPath  # noqa: E402, F401
+from .union import UnionSource, UnionSource as union, UnionPath  # noqa: E402, F401
+from .mount import MountSource, MountSource as mount, MountPath  # noqa: E402, F401

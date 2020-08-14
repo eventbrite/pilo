@@ -222,7 +222,7 @@ class Sequence(collections.Sequence):
 
     def __getitem__(self, key):
         offset = 0
-        for path, length in self.sequences:
+        for path, length in self.sequences:  # noqa: B007
             if key < offset + length:
                 break
             offset += length
