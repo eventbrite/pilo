@@ -165,7 +165,7 @@ class CreatedCountMixin(object):
 
     _created_count = 0
 
-    def  __init__(self):
+    def __init__(self):
         CreatedCountMixin._created_count += 1
         self._count = CreatedCountMixin._created_count
 
@@ -355,15 +355,16 @@ class Field(CreatedCountMixin, ContextMixin):
         self.attach_parent = False
         self.options(**options)
 
-    def options(self,
-                nullable=NOT_SET,
-                default=NOT_SET,
-                optional=NOT_SET,
-                ignore=NOT_SET,
-                translate=NOT_SET,
-                attach_parent=NOT_SET,
-                tags=NOT_SET,
-        ):
+    def options(
+        self,
+        nullable=NOT_SET,
+        default=NOT_SET,
+        optional=NOT_SET,
+        ignore=NOT_SET,
+        translate=NOT_SET,
+        attach_parent=NOT_SET,
+        tags=NOT_SET,
+    ):
         if nullable is not NOT_SET:
             self.nullable = nullable
 
@@ -393,10 +394,11 @@ class Field(CreatedCountMixin, ContextMixin):
     def __str__(self):
         attrs = ', '.join(
             '{0}={1}'.format(k, v) for k, v in [
-            ('name', self.name),
-            ('src', self.src),
-            ('parent', self.parent),
-        ])
+                ('name', self.name),
+                ('src', self.src),
+                ('parent', self.parent),
+            ]
+        )
         return '{0}({1})'.format(type(self).__name__, attrs)
 
     def attach(self, parent, name=None):
@@ -405,8 +407,7 @@ class Field(CreatedCountMixin, ContextMixin):
             self.src = self.name
         if inspect.isclass(parent) and issubclass(parent, Form):
             for base in inspect.getmro(parent)[1:]:
-                if (not hasattr(base, self.name) or
-                    not isinstance(getattr(base, self.name), Field)):
+                if not hasattr(base, self.name) or not isinstance(getattr(base, self.name), Field):
                     continue
                 self._count = getattr(base, self.name)._count
                 break
@@ -627,7 +628,8 @@ class Field(CreatedCountMixin, ContextMixin):
                 value = self.map()
         else:
             if form is not getattr(self.ctx, 'parent', None):
-                is_form = lambda frame: getattr(frame, 'parent', None) is form
+                def is_form(frame):
+                    return getattr(frame, 'parent', None) is form
                 try:
                     with self.ctx.rewind(is_form):
                         return self.map()
@@ -808,10 +810,7 @@ class Integer(Number):
             value = path.primitive(six.string_types)
             m = pattern_re.match(value)
             if not m:
-                raise ValueError(
-                    '{0} does not match pattern "{1}"'.format(
-                    value, pattern_re.pattern
-                ))
+                raise ValueError('{0} does not match pattern "{1}"'.format(value, pattern_re.pattern))
             return int(m.group(0))
 
         return self.parse(parse)
@@ -957,7 +956,7 @@ class Time(Field, RangeMixin):
         if isinstance(value, (time.struct_time, datetime.time)):
             return value
         value = path.primitive(six.string_types)
-        if self._format != None:
+        if self._format is not None:
             parsed = time.strptime(value, self._format)
         else:
             self.ctx.errors.invalid('Unknown format for value "{0}"'.format(value))
@@ -1001,7 +1000,7 @@ class Datetime(Field, RangeMixin):
             except iso8601.ParseError as ex:
                 self.ctx.errors.invalid(str(ex))
                 return ERROR
-        elif self._format != None:
+        elif self._format is not None:
             parsed = datetime.datetime.strptime(value, self._format)
         else:
             self.ctx.errors.invalid('Unknown format for value "{0}"'.format(value))
@@ -1187,7 +1186,7 @@ class Dict(Field):
 
 class Code(Field):
 
-    pattern = re.compile('(?:(?P<module>[\w\.]+):)?(?P<attr>[\w\.]+)')
+    pattern = re.compile(r'(?:(?P<module>[\w\.]+):)?(?P<attr>[\w\.]+)')
 
     @classmethod
     def inline_match(cls, value):
@@ -1242,9 +1241,7 @@ class Code(Field):
                 return ERROR
 
         self.ctx.errors.invalid(
-            '"{0}" does not match import pattern "{1}" and is not a code block'.format(
-            value, self.pattern.pattern
-        ))
+            '"{0}" does not match import pattern "{1}" and is not a code block'.format(value, self.pattern.pattern))
         return ERROR
 
 
@@ -1481,7 +1478,10 @@ class FormMeta(type):
 
     def __new__(mcs, name, bases, dikt):
         cls = type.__new__(mcs, name, bases, dikt)
-        is_field = lambda x: isinstance(x, Field)
+
+        def is_field(x):
+            return isinstance(x, Field)
+
         fields, field_ids = [], set()
         for name, field in inspect.getmembers(cls, is_field):
             if not field.is_attached:

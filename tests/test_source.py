@@ -18,20 +18,19 @@ class TestSource(TestCase):
         )
 
 
-
 class TestDefaultSource(TestSource):
 
     def test_path(self):
         src = pilo.source.DefaultSource({
-        'slurp': {
-            'state_dir': '/var/lib/slurp',
-            'backfill': 'f',
-            'strict': 'F',
-            'read_size': '1024',
-            'buffer_size': '1048576',
-            'poop': None,
-            'includes': ['/etc/slurp/conf.d/*.conf', '/etc/slurp/conf.d/*.py'],
-        }})
+            'slurp': {
+                'state_dir': '/var/lib/slurp',
+                'backfill': 'f',
+                'strict': 'F',
+                'read_size': '1024',
+                'buffer_size': '1048576',
+                'poop': None,
+                'includes': ['/etc/slurp/conf.d/*.conf', '/etc/slurp/conf.d/*.py'],
+                }})
 
         results = []
 
@@ -127,15 +126,15 @@ class TestJsonSource(TestSource):
 
     def test_path(self):
         src = pilo.source.JsonSource(json.dumps({
-        'slurp': {
-            'state_dir': '/var/lib/slurp',
-            'backfill': False,
-            'strict': False,
-            'read_size': 1024,
-            'buffer_size': 1048576,
-            'poop': None,
-            'includes': ['/etc/slurp/conf.d/*.conf', '/etc/slurp/conf.d/*.py'],
-        }}))
+            'slurp': {
+                'state_dir': '/var/lib/slurp',
+                'backfill': False,
+                'strict': False,
+                'read_size': 1024,
+                'buffer_size': 1048576,
+                'poop': None,
+                'includes': ['/etc/slurp/conf.d/*.conf', '/etc/slurp/conf.d/*.py'],
+                }}))
 
         results = []
 
@@ -225,7 +224,6 @@ class TestUnionSource(TestSource):
             ('a.b[1]', False, False),
             ('a.b[2]', False, False),
         ], [(path, exists, is_null) for path, exists, is_null in results])
-
 
     def test_merge(self):
 
