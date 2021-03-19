@@ -17,7 +17,8 @@ dev
 
 Or with docker
 
-..code:: bash
+.. code:: bash
+
     $ git clone https://github.com/eventbrite/pilo.git
     $ cd pilo
     $ docker build --tag=pilo .
