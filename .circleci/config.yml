@@ -46,7 +46,7 @@ jobs:
           <<: *docker-ecr-login
       - add_ssh_keys:
           fingerprints:
-            - "d0:8d:3b:dd:10:0d:3e:12:d4:94:25:63:99:a4:ac:59"
+            - "3a:de:33:cd:83:44:ee:f1:85:d1:16:68:47:1f:bd:4c"
       - run:
           name: Git Config
           command: /srv/ci_cd/git_config/main.sh
