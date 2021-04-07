@@ -129,7 +129,7 @@ jobs:
       - run:
           name: Slack - Set version
           command: |
-            echo "export VERSION=${CIRCLE_BRANCH#\"test_to_\"}"
+            echo "export VERSION=${CIRCLE_BRANCH#\"test_to_\"}" >> $BASH_ENV || true
           when: always
       - slack/notify:
           channel: "common-libraries-circleci"
