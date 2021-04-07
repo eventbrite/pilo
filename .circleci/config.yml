@@ -126,13 +126,18 @@ jobs:
           command: |
             [[ ${CIRCLE_PULL_REQUEST} != "" ]] && echo "export PR_LNK=\"Github pull request: ${CIRCLE_PULL_REQUEST}\n\"" >> $BASH_ENV || true
           when: always
+      - run:
+          name: Slack - Set version
+          command: |
+            echo "export VERSION=${CIRCLE_BRANCH#\"test_to_\"}"
+          when: always
       - slack/notify:
           channel: "common-libraries-circleci"
-          custom: '{"attachments":[{"color": "danger","mrkdwn_in": ["text"],"text": "Cut: ${CIRCLE_BRANCH#"test_to_"} Failed to build: *${CIRCLE_PROJECT_REPONAME}*\nUser: *${CIRCLE_USERNAME}*\n${PR_LNK}CircleCI build url: ${CIRCLE_BUILD_URL}\nFailed on Step: *${STEP}*"}]}'
+          custom: '{"attachments":[{"color": "danger","mrkdwn_in": ["text"],"text": "Cut: ${VERSION} Failed to build: *${CIRCLE_PROJECT_REPONAME}*\nUser: *${CIRCLE_USERNAME}*\n${PR_LNK}CircleCI build url: ${CIRCLE_BUILD_URL}\nFailed on Step: *${STEP}*"}]}'
           event: fail
       - slack/notify:
           channel: "common-libraries-circleci"
-          custom: '{"attachments": [{"color": "good","mrkdwn_in": ["text"],"text": "Cut: ${CIRCLE_BRANCH#\"test_to_\"} Success to build: *${CIRCLE_PROJECT_REPONAME}*\nUser: *${CIRCLE_USERNAME}*\n${PR_LNK}CircleCI build url: ${CIRCLE_BUILD_URL}"}]}'
+          custom: '{"attachments": [{"color": "good","mrkdwn_in": ["text"],"text": "Cut: ${VERSION} Success to build: *${CIRCLE_PROJECT_REPONAME}*\nUser: *${CIRCLE_USERNAME}*\n${PR_LNK}CircleCI build url: ${CIRCLE_BUILD_URL}"}]}'
           event: pass
 
 
