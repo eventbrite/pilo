@@ -132,7 +132,7 @@ jobs:
           event: fail
       - slack/notify:
           channel: "common-libraries-circleci"
-          custom: '{"attachments": [{"color": "good","mrkdwn_in": ["text"],"text": "Success to build: *${CIRCLE_PROJECT_REPONAME}*\nUser: *${CIRCLE_USERNAME}*\n${PR_LNK}CircleCI build url: ${CIRCLE_BUILD_URL}"}]}'
+          custom: '{"attachments": [{"color": "good","mrkdwn_in": ["text"],"text": "Cut: ${CIRCLE_BRANCH#"test_to_"} Success to build: *${CIRCLE_PROJECT_REPONAME}*\nUser: *${CIRCLE_USERNAME}*\n${PR_LNK}CircleCI build url: ${CIRCLE_BUILD_URL}"}]}'
           event: pass
 
 
