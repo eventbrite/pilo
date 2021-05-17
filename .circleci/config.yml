@@ -109,7 +109,7 @@ jobs:
           name: Run tests
           command: |
             echo "export STEP=\"Run tests\"" >> $BASH_ENV
-            docker run $LIBRARY_NAME
+            docker-compose run tox
       - run:
           name: Retrieve test results and store
           command: |
