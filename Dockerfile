@@ -5,3 +5,4 @@ WORKDIR /src/
 COPY . .
 
 CMD tox
+
