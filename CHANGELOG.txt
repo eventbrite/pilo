@@ -13,3 +13,8 @@
 -----------------------------
 release a version to fix devpi
 
+
+0.8.2+eventbrite (2021-05-20)
+-----------------------------
+- [PATCH] remove publish to py3.5 (#16)
+
