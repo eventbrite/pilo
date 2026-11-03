@@ -1,4 +1,8 @@
 import collections
+try:
+    from collections.abc import Mapping as ABCMapping, Sequence as ABCSequence
+except ImportError:  # Python 2
+    from collections import Mapping as ABCMapping, Sequence as ABCSequence
 import re
 import shlex
 import six
@@ -37,7 +41,7 @@ class ConfigPath(Path):
             return NONE
 
 
-class Sequence(collections.Sequence):
+class Sequence(ABCSequence):
 
     def __init__(self, value):
         if '\n' in value:
@@ -54,7 +58,7 @@ class Sequence(collections.Sequence):
         return len(self.values)
 
 
-class SectionMapping(collections.Mapping):
+class SectionMapping(ABCMapping):
 
     def __init__(self, config, section, defaults):
         self.config = config
@@ -87,7 +91,7 @@ class SectionMapping(collections.Mapping):
         return len(self.sub_mappings) + len(self.config.options(self.section))
 
 
-class Mapping(collections.Mapping):
+class Mapping(ABCMapping):
 
     def __init__(self, config, defaults=None):
         self.config = config
@@ -131,8 +135,11 @@ class ConfigSource(Source, ParserMixin):
         if isinstance(config, six.string_types):
             parser = six.moves.configparser.ConfigParser()
             if preserve_case:
-                config.optionxform = lambda x: x
-            parser.readfp(six.moves.StringIO.StringIO(config))
+                parser.optionxform = lambda x: x
+            if hasattr(parser, 'read_string'):
+                parser.read_string(config)
+            else:  # Python 2
+                parser.readfp(six.moves.StringIO(config))
             config = parser
         self.config = config
         self.section = section
@@ -166,12 +173,12 @@ class ConfigSource(Source, ParserMixin):
         value = path.value
         if isinstance(value, six.string_types):
             return len(Sequence(value))
-        if isinstance(value, collections.Sequence):
+        if isinstance(value, ABCSequence):
             return len(value)
         raise self.error(path, 'not a sequence')
 
     def mapping(self, path):
-        if isinstance(path.value, collections.Mapping):
+        if isinstance(path.value, ABCMapping):
             return path.value.keys()
         raise self.error(path, 'not a mapping')
 

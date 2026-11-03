@@ -1,4 +1,7 @@
-import collections
+try:
+    from collections.abc import Mapping as ABCMapping, Sequence as ABCSequence
+except ImportError:  # Python 2
+    from collections import Mapping as ABCMapping, Sequence as ABCSequence
 
 from . import Path, PathPart, Source, NONE, DefaultSource
 
@@ -78,7 +81,7 @@ class UnionSource(Source):
         for i, src in enumerate(srcs):
             if isinstance(src, Source):
                 continue
-            if isinstance(src, collections.Mapping):
+            if isinstance(src, ABCMapping):
                 src = DefaultSource(src)
             else:
                 raise TypeError(
@@ -141,7 +144,7 @@ class Join(Source):
         return path
 
 
-class Mapping(collections.Mapping):
+class Mapping(ABCMapping):
 
     def __init__(self, src, paths, merge=None):
         mappings = []
@@ -192,7 +195,7 @@ class Mapping(collections.Mapping):
         return iter(list(set(keys)))
 
 
-class Sequence(collections.Sequence):
+class Sequence(ABCSequence):
 
     def __init__(self, src, paths, merge=None):
         sequences = []

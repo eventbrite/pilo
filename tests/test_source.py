@@ -76,7 +76,7 @@ class TestConfigSource(TestSource):
 
     def test_path(self):
         config = six.moves.configparser.ConfigParser()
-        config.readfp(six.moves.StringIO("""\
+        config_text = """\
 [slurp]
 state_dir = /var/lib/slurp
 backfill = f
@@ -84,7 +84,11 @@ strict = F
 read_size = 1024
 buffer_size = 1048576
 includes = /etc/slurp/conf.d/*.conf /etc/slurp/conf.d/*.py
-"""))
+"""
+        if hasattr(config, 'read_string'):
+            config.read_string(config_text)
+        else:  # Python 2
+            config.readfp(six.moves.StringIO(config_text))
         src = pilo.source.ConfigSource(config)
         results = []
 

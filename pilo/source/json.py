@@ -40,7 +40,9 @@ class JsonSource(Source):
         self.strict = strict
         self.location = location
         self.text = text
-        self.data = json.loads(text, encoding=encoding)
+        if encoding is not None and isinstance(text, bytes):
+            text = text.decode(encoding)
+        self.data = json.loads(text)
 
     def as_string(self, field, value):
         if isinstance(value, six.string_types):
