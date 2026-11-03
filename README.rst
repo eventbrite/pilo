@@ -7,7 +7,7 @@ Yet another form parser.
 test
 ----
 
-Run ``tox`` to run tests in Python 2 & 3.
+Run ``tox`` to run tests on Python 3.7+.
 
 release
 -------

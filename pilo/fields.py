@@ -43,7 +43,6 @@ This defines `Form` and the `Field`s use to build them. Use it like:
 """
 import contextlib
 import copy
-import sys
 import datetime
 import decimal
 import inspect
@@ -65,10 +64,7 @@ from . import (
     NONE, NOT_SET, ERROR, IGNORE, ctx, ContextMixin, Close, Source, SourceError, DefaultSource, Types,
 )
 
-if sys.version_info <= (3, 3):
-    argspec = inspect.getargspec
-else:
-    argspec = inspect.getfullargspec
+argspec = inspect.getfullargspec
 
 
 __all__ = [
