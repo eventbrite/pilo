@@ -20,7 +20,10 @@ specializations for *computing* values from serializations:
 
 There's also `UnionSource` which unions a collection of `Source`s.
 """
-import collections
+try:
+    from collections.abc import MutableSequence
+except ImportError:  # Python 2
+    from collections import MutableSequence
 import inspect
 import six
 
@@ -58,7 +61,7 @@ class PathPart(object):
         return str(self.key)
 
 
-class Path(collections.MutableSequence):
+class Path(MutableSequence):
     """
     Represents a path to a `Field` within a `Source`.
 

@@ -1,4 +1,7 @@
-import collections
+try:
+    from collections.abc import Mapping, Sequence
+except ImportError:  # Python 2
+    from collections import Mapping, Sequence
 import copy
 import six
 
@@ -93,16 +96,16 @@ class DefaultSource(Source, ParserMixin):
         return DefaultPath(self, self.location)
 
     def sequence(self, path):
-        if isinstance(path.value, (collections.Sequence, list, tuple)):
+        if isinstance(path.value, (Sequence, list, tuple)):
             return len(path.value)
         raise self.error(path, 'is not a sequence')
 
     def mapping(self, path):
-        if isinstance(path.value, (collections.Mapping, dict)):
+        if isinstance(path.value, (Mapping, dict)):
             if self.aliases and len(path) == 0:
                 return self.aliases.keys()
             return path.value.keys()
-        if isinstance(path.value, (collections.Sequence, list, tuple)) and self.aliases and len(path) == 0:
+        if isinstance(path.value, (Sequence, list, tuple)) and self.aliases and len(path) == 0:
             return self.aliases.keys()
         raise self.error(path, 'is not a mapping')
 

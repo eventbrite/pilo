@@ -1,10 +1,13 @@
-import collections
+try:
+    from collections.abc import MutableSequence
+except ImportError:  # Python 2
+    from collections import MutableSequence
 import six
 
 from . import PathPart, Source, NONE, DefaultSource
 
 
-class MountPath(collections.MutableSequence):
+class MountPath(MutableSequence):
 
     def __init__(self, src):
         self.part = None

@@ -46,12 +46,12 @@ import copy
 import sys
 import datetime
 import decimal
-import imp
 import inspect
 import numbers
 import re
 import six
 import time
+import types
 import uuid
 import warnings
 import weakref
@@ -1218,7 +1218,7 @@ class Code(Field):
 
     @classmethod
     def compile(cls, name, code, **code_globals):
-        module = imp.new_module('<{0}>'.format(name))
+        module = types.ModuleType('<{0}>'.format(name))
         module.__dict__.update(code_globals)
         exec(code) in module.__dict__
         return module
